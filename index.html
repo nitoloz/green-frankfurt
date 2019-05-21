@@ -9,7 +9,19 @@
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
           integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: calc(100% - 100px);
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
 
@@ -35,13 +47,21 @@
         </svg>
     </a>
 </nav>
-<div class="container-fluid main-container">
-</div>
+<!--<div class="container-fluid main-container">-->
+    <!--<form>-->
+        <!--<input id="pressme" type="button" value="Press">-->
+    <!--</form>-->
+    <div id="map"></div>
+
+<!--</div>-->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"
         crossorigin="anonymous"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnxG5l6GWBh9l7vF7wt1lSuGAo5SMuNiU&callback=initMap">
+</script>
 
 <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
         <!--integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
