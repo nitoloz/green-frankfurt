@@ -24,7 +24,6 @@ function initMap() {
             return {value: key, count: internalMap[key]};
         }).sort((a, b) => b.count - a.count);
         console.log(values);
-        // let select = $('select').selectize(values.map(v => v.value));
 
         $('select').selectize({
             theme: 'links',
@@ -35,20 +34,21 @@ function initMap() {
             render: {
                 option: function (data, escape) {
                     return `<div class="option">
-                                <span class="title">${escape(data.value)}(${escape(data.count)})</span>
+                                <span class="title">${escape(data.value)}</span>
+                                <span class="url"> (${escape(data.count)})</span>
                             </div>`;
                 },
                 item: function (data, escape) {
                     return '<div class="item">' + escape(data.value) + '</div>';
                 }
             },
-            create: function (input) {
-                return {
-                    id: 0,
-                    title: input,
-                    url: '#'
-                };
-            }
+            // create: function (input) {
+            //     return {
+            //         id: 0,
+            //         title: input,
+            //         url: '#'
+            //     };
+            // }
         });
 
         heatmap = new google.maps.visualization.HeatmapLayer({
