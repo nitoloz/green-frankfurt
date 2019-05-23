@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
           integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.min.css" rel="stylesheet">
     <style>
 
         /* Always set the map height explicitly to define the size of the div
@@ -25,7 +26,6 @@
             padding: 0;
         }
 
-
         .github-corner:hover .octo-arm {
             animation: octocat-wave 560ms ease-in-out
         }
@@ -40,26 +40,37 @@
             fill: rgba(0, 123, 255, .5);
         }
 
-        .title{
+        .page-title {
             font-size: 60px;
             font-family: 'Major Mono Display', monospace;
         }
 
-        .main-container{
-            height:100%;
+        .main-container {
+            height: 100%;
+        }
+
+        .selectize-control .option .title {
+            display: block;
+        }
+        .selectize-control .option .url {
+            font-size: 12px;
+            display: block;
+            color: #a0a0a0;
+        }
+        .selectize-control .item a {
+            color: #006ef5;
+        }
+        .selectize-control .item.active a {
+            color: #303030;
         }
 
     </style>
 </head>
 <body>
 
-<!--<nav class="navbar navbar-light sticky-top">-->
-<!--<a class="navbar-brand">-->
-<!--<form class="form-inline">-->
-<!--<img src="images/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">-->
-<div class="text-center title">green frAnkfUrt</div>
-<!--</form>-->
-<!--</a>-->
+
+<div class="text-center page-title">green frAnkfurt</div>
+
 <a href="https://github.com/nitoloz/green-frankfurt" class="github-corner" aria-label="View source on GitHub">
     <svg width="80" height="80" viewBox="0 0 250 250" class="octocat" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -76,7 +87,12 @@
 </a>
 
 <!--</nav>-->
-<div  class="container-fluid main-container">
+<div class="container-fluid main-container">
+    <div class="row">
+        <div class="col-12">
+            <select></select>
+        </div>
+    </div>
     <div id="map"></div>
 
 </div>
@@ -85,20 +101,16 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+        crossorigin="anonymous"></script>
+
 <script src="main.js"></script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnxG5l6GWBh9l7vF7wt1lSuGAo5SMuNiU&libraries=visualization&callback=initMap">
 </script>
-
-<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
-<!--integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
-<!--crossorigin="anonymous"></script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"-->
-<!--integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"-->
-<!--crossorigin="anonymous"></script>-->
-<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"-->
-<!--integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"-->
-<!--crossorigin="anonymous"></script>-->
 
 
 </body>
