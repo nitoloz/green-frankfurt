@@ -1,0 +1,35 @@
+/* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+#map {
+    height: 100%;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html, body {
+    height: calc(100% - 100px);
+    margin: 0;
+    padding: 0;
+}
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out
+}
+
+.octocat {
+    color: #fff;
+    position: absolute;
+    top: 0;
+    border: 0;
+    right: 0;
+    z-index: 1021;
+    fill: rgba(0, 123, 255, .5);
+}
+
+.page-title {
+    font-size: 60px;
+    font-family: 'Major Mono Display', monospace;
+}
+
+.main-container {
+    height: 100%;
+}

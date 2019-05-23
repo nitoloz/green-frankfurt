@@ -1,0 +1,12 @@
+.selectize-control .option .title {
+}
+.selectize-control .option .url {
+    font-size: 12px;
+    color: #a0a0a0;
+}
+.selectize-control .item a {
+    color: #006ef5;
+}
+.selectize-control .item.active a {
+    color: #303030;
+}
