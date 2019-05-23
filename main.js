@@ -1,5 +1,5 @@
-let utm = "+proj=utm +zone=32";
-let wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+const utm = "+proj=utm +zone=32";
+const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 let coordinates;
 
 function initMap() {
@@ -14,7 +14,7 @@ function initMap() {
         processedData = data.map((d, i) => {
             coordinates = proj4(utm, wgs84, [parseFloat(d.RECHTSWERT), parseFloat(d.HOCHWERT)]);
             return {
-                ...d, ...{'latitude': coordinates[1], 'longitude': coordinates[0]}
+                ...d, ...{'lat': coordinates[1], 'lng': coordinates[0]}
             };
         });
         const internalMap = new Map();
@@ -52,7 +52,7 @@ function initMap() {
         });
 
         heatmap = new google.maps.visualization.HeatmapLayer({
-            data: processedData.map(d => new google.maps.LatLng(d.latitude, d.longitude)),
+            data: processedData.map(d => new google.maps.LatLng(d.lat, d.lng)),
             map: map
         });
         console.log('Data processed!');
