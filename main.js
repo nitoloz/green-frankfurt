@@ -3,12 +3,11 @@ let wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 let coordinates;
 
 function initMap() {
-    let myLatlng = new google.maps.LatLng(50.128728, 8.667937);
-    let mapOptions = {
+    let map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12.8,
-        center: myLatlng
-    };
-    let map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        center: new google.maps.LatLng(50.128728, 8.667937)
+    });
+
     let heatmap;
     let processedData = [];
     d3.csv("data.csv").then(data => {
@@ -25,8 +24,9 @@ function initMap() {
         }).sort((a, b) => b.count - a.count);
         console.log(values);
 
-        $('select').selectize({
+       const multiSelect =  $('select').selectize({
             theme: 'links',
+            plugins: ['remove_button','restore_on_backspace'],
             maxItems: null,
             valueField: 'value',
             searchField: 'value',
@@ -42,13 +42,13 @@ function initMap() {
                     return '<div class="item">' + escape(data.value) + '</div>';
                 }
             },
-            // create: function (input) {
-            //     return {
-            //         id: 0,
-            //         title: input,
-            //         url: '#'
-            //     };
-            // }
+            onItemAdd: function (value, $item) {
+                console.log(this.items);
+            },
+            onItemRemove: function (value, $item) {
+                console.log(this.items);
+            }
+
         });
 
         heatmap = new google.maps.visualization.HeatmapLayer({
