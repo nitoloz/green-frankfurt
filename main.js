@@ -6,6 +6,7 @@ let map;
 let heatmap;
 let cluster;
 let selectDropdown;
+let processedData = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -13,7 +14,6 @@ function initMap() {
         center: new google.maps.LatLng(50.128728, 8.667937)
     });
 
-    let processedData = [];
     appendMultiSelect([]);
 
     d3.csv("data.csv").then(data => {
@@ -96,4 +96,7 @@ function appendMultiSelect(values) {
 
 function filterView() {
     console.log(selectDropdown[0].selectize.items);
+    const selectedItems = selectDropdown[0].selectize.items;
+    heatmap.setData(processedData.filter(d => selectedItems.indexOf(d['Gattung/Art/Deutscher Name']) !== -1)
+        .map(d => new google.maps.LatLng(d.lat, d.lng)))
 }
