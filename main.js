@@ -8,7 +8,17 @@ let processedData = [];
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12.8,
-        center: new google.maps.LatLng(50.128728, 8.667937)
+        center: new google.maps.LatLng(50.128728, 8.667937),
+        mapTypeId: 'satellite',
+        styles:[
+            {
+                featureType: "all",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ]
     });
 
     appendMultiSelect([]);
