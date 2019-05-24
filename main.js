@@ -1,14 +1,18 @@
 const utm = "+proj=utm +zone=32";
 const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 let coordinates;
+let view = 'heatmap';
+let map;
+let heatmap;
+let cluster;
+let selectDropdown;
 
 function initMap() {
-    let map = new google.maps.Map(document.getElementById("map"), {
+    map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12.8,
         center: new google.maps.LatLng(50.128728, 8.667937)
     });
 
-    let heatmap;
     let processedData = [];
     appendMultiSelect([]);
 
@@ -22,7 +26,7 @@ function initMap() {
         const values = Object.keys(internalMap).map((key) => {
             return {value: key, count: internalMap[key]};
         }).sort((a, b) => b.count - a.count);
-        $('select')[0].selectize.addOption(values);
+        selectDropdown[0].selectize.addOption(values);
         // const markers = processedData.map(function (location, i) {
         //     return new google.maps.Marker({
         //         position: {lat: location.lat, lng: location.lng},
@@ -36,21 +40,39 @@ function initMap() {
         //     });
         // });
         // // Add a marker clusterer to manage the markers.
-        // const markerCluster = new MarkerClusterer(map, markers,
+        // cluster = new MarkerClusterer(map, markers,
         //     {
         //         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
         //         minimumClusterSize: 25
         //     });
+        // cluster.setMap(null);
         heatmap = new google.maps.visualization.HeatmapLayer({
             data: processedData.map(d => new google.maps.LatLng(d.lat, d.lng)),
-            // data: processedData,
-            map: map
+            map: map,
+            opacity: 1,
+            radius: 5
+            // gradient: [
+            //     'rgba(0, 255, 255, 0)',
+            //     'rgba(0, 255, 255, 1)',
+            //     'rgba(0, 191, 255, 1)',
+            //     'rgba(0, 127, 255, 1)',
+            //     'rgba(0, 63, 255, 1)',
+            //     'rgba(0, 0, 255, 1)',
+            //     'rgba(0, 0, 223, 1)',
+            //     'rgba(0, 0, 191, 1)',
+            //     'rgba(0, 0, 159, 1)',
+            //     'rgba(0, 0, 127, 1)',
+            //     'rgba(63, 0, 91, 1)',
+            //     'rgba(127, 0, 63, 1)',
+            //     'rgba(191, 0, 31, 1)',
+            //     'rgba(255, 0, 0, 1)'
+            // ]
         });
     });
 }
 
 function appendMultiSelect(values) {
-    $('select').selectize({
+    selectDropdown = $('select').selectize({
         theme: 'links',
         plugins: ['remove_button', 'restore_on_backspace'],
         maxItems: null,
@@ -67,13 +89,11 @@ function appendMultiSelect(values) {
             item: function (data, escape) {
                 return '<div class="item">' + escape(data.value) + '</div>';
             }
-        },
-        onItemAdd: function (value, $item) {
-            console.log(this.items);
-        },
-        onItemRemove: function (value, $item) {
-            console.log(this.items);
         }
 
     });
+}
+
+function filterView() {
+    console.log(selectDropdown[0].selectize.items);
 }
