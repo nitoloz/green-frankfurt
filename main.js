@@ -1,6 +1,6 @@
 const utm = "+proj=utm +zone=32";
 const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
-let coordinates,map,heatmap,selectDropdown;
+let coordinates, map, heatmap, selectDropdown;
 let processedData = [];
 // let view = 'heatmap';
 // let cluster;
@@ -10,12 +10,12 @@ function initMap() {
         zoom: 12.8,
         center: new google.maps.LatLng(50.128728, 8.667937),
         mapTypeId: 'satellite',
-        styles:[
+        styles: [
             {
                 featureType: "all",
                 elementType: "labels",
                 stylers: [
-                    { visibility: "off" }
+                    {visibility: "off"}
                 ]
             }
         ]
@@ -28,10 +28,15 @@ function initMap() {
         let startTime = new Date().getTime();
         processedData = processCoordinates(data);
         let endTime = new Date().getTime();
-        console.log("duration [ms] = " + (endTime-startTime));
+        console.log("duration [ms] = " + (endTime - startTime));
 
         const internalMap = new Map();
-        processedData.forEach(d => internalMap[d['Gattung/Art/Deutscher Name']] ? internalMap[d['Gattung/Art/Deutscher Name']]++ : internalMap[d['Gattung/Art/Deutscher Name']] = 1);
+        processedData.forEach(d => {
+            const [latinName, germanName] = d['Gattung/Art/Deutscher Name'].split('. ');
+            d['germanName'] = germanName;
+            d['latinName'] = latinName;
+            internalMap[d['Gattung/Art/Deutscher Name']] ? internalMap[d['Gattung/Art/Deutscher Name']]++ : internalMap[d['Gattung/Art/Deutscher Name']] = 1;
+        });
         const values = Object.keys(internalMap).map((key) => {
             return {value: key, count: internalMap[key]};
         }).sort((a, b) => b.count - a.count);
@@ -125,7 +130,6 @@ function changeView() {
             }
         });
     });
-    // Add a marker clusterer to manage the markers.
     cluster = new MarkerClusterer(map, markers,
         {
             imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
@@ -133,7 +137,7 @@ function changeView() {
         });
 }
 
-function processCoordinates(data){
+function processCoordinates(data) {
     return data.map((d, i) => {
         coordinates = proj4(utm, wgs84, [parseFloat(d.RECHTSWERT), parseFloat(d.HOCHWERT)]);
         return {...d, ...{'lat': coordinates[1], 'lng': coordinates[0]}};
