@@ -1,12 +1,9 @@
 const utm = "+proj=utm +zone=32";
 const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
-let coordinates;
-let view = 'heatmap';
-let map;
-let heatmap;
-let cluster;
-let selectDropdown;
+let coordinates,map,heatmap,selectDropdown;
 let processedData = [];
+// let view = 'heatmap';
+// let cluster;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -17,10 +14,12 @@ function initMap() {
     appendMultiSelect([]);
 
     d3.csv("data.csv").then(data => {
-        processedData = data.map((d, i) => {
-            coordinates = proj4(utm, wgs84, [parseFloat(d.RECHTSWERT), parseFloat(d.HOCHWERT)]);
-            return {...d, ...{'lat': coordinates[1], 'lng': coordinates[0]}};
-        });
+        console.log("start processing");
+        let startTime = new Date().getTime();
+        processedData = processCoordinates(data);
+        let endTime = new Date().getTime();
+        console.log("duration [ms] = " + (endTime-startTime));
+
         const internalMap = new Map();
         processedData.forEach(d => internalMap[d['Gattung/Art/Deutscher Name']] ? internalMap[d['Gattung/Art/Deutscher Name']]++ : internalMap[d['Gattung/Art/Deutscher Name']] = 1);
         const values = Object.keys(internalMap).map((key) => {
@@ -99,4 +98,11 @@ function filterView() {
     const selectedItems = selectDropdown[0].selectize.items;
     heatmap.setData(processedData.filter(d => selectedItems.indexOf(d['Gattung/Art/Deutscher Name']) !== -1)
         .map(d => new google.maps.LatLng(d.lat, d.lng)))
+}
+
+function processCoordinates(data){
+    return data.map((d, i) => {
+        coordinates = proj4(utm, wgs84, [parseFloat(d.RECHTSWERT), parseFloat(d.HOCHWERT)]);
+        return {...d, ...{'lat': coordinates[1], 'lng': coordinates[0]}};
+    });
 }
