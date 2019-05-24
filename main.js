@@ -44,7 +44,6 @@ function initMap() {
         //         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
         //         minimumClusterSize: 25
         //     });
-        // cluster.setMap(null);
         heatmap = new google.maps.visualization.HeatmapLayer({
             data: processedData.map(d => new google.maps.LatLng(d.lat, d.lng)),
             map: map,
@@ -98,6 +97,30 @@ function filterView() {
     const selectedItems = selectDropdown[0].selectize.items;
     heatmap.setData(processedData.filter(d => selectedItems.indexOf(d['Gattung/Art/Deutscher Name']) !== -1)
         .map(d => new google.maps.LatLng(d.lat, d.lng)))
+}
+
+function changeView() {
+    heatmap.setMap(null);
+    console.log(selectDropdown[0].selectize.items);
+    const selectedItems = selectDropdown[0].selectize.items;
+    const markers = processedData.filter(d => selectedItems.indexOf(d['Gattung/Art/Deutscher Name']) !== -1).map(function (location, i) {
+        return new google.maps.Marker({
+            position: {lat: location.lat, lng: location.lng},
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 5,
+                fillColor: "green",
+                fillOpacity: 0.4,
+                strokeWeight: 0.4
+            }
+        });
+    });
+    // Add a marker clusterer to manage the markers.
+    cluster = new MarkerClusterer(map, markers,
+        {
+            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+            minimumClusterSize: 25
+        });
 }
 
 function processCoordinates(data){
