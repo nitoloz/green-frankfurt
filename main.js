@@ -87,6 +87,11 @@ function initMap() {
             //     'rgba(255, 0, 0, 1)'
             // ]
         });
+        cluster = new MarkerClusterer(map, [],
+            {
+                imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                minimumClusterSize: 25
+            });
     });
 }
 
@@ -114,20 +119,45 @@ function appendMultiSelect(values) {
             numberOfSelectedTrees = this.items.map(item => internalMap[item].count).reduce((a, b) => a + b);
         },
         onItemRemove: function (value, $item) {
-            numberOfSelectedTrees = this.items.map(item => internalMap[item].count).reduce((a, b) => a + b);
+            const countsArray = this.items.map(item => internalMap[item].count);
+            numberOfSelectedTrees = countsArray.length > 0 ? countsArray.reduce((a, b) => a + b) : 0;
         }
     });
 }
 
 function filterView() {
-    const selectedItems = selectDropdown[0].selectize.items;
-    heatmap.setData(processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
-        .map(d => new google.maps.LatLng(d.lat, d.lng)))
+    if (view === 'heatmap') {
+        const selectedItems = selectDropdown[0].selectize.items;
+        heatmap.setData(processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
+            .map(d => new google.maps.LatLng(d.lat, d.lng)))
+    } else {
+        if (numberOfSelectedTrees < 15000) {
+            cluster.clearMarkers();
+            const selectedItems = selectDropdown[0].selectize.items;
+            const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
+                return new google.maps.Marker({
+                    position: {lat: location.lat, lng: location.lng},
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "red",
+                        fillOpacity: 0.4,
+                        strokeWeight: 0.4
+                    }
+                });
+            });
+            cluster.addMarkers(markers);
+        } else {
+            const selectedItems = selectDropdown[0].selectize.items;
+            heatmap.setData(processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
+                .map(d => new google.maps.LatLng(d.lat, d.lng)))
+        }
+    }
 }
 
 function changeView() {
-    if (numberOfSelectedTrees < 15000) {
-        if (view === 'heatmap') {
+    if (view === 'heatmap') {
+        if (numberOfSelectedTrees < 15000) {
             view = 'cluster';
             heatmap.setMap(null);
             const selectedItems = selectDropdown[0].selectize.items;
@@ -143,20 +173,14 @@ function changeView() {
                     }
                 });
             });
-            if (!cluster) {
-                cluster = new MarkerClusterer(map, markers,
-                    {
-                        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-                        minimumClusterSize: 25
-                    });
-            } else {
-                cluster.addMarkers(markers);
-            }
+            cluster.addMarkers(markers);
         } else {
-            view = 'heatmap';
-            cluster.clearMarkers();
-            heatmap.setMap(map);
+
         }
+    } else {
+        view = 'heatmap';
+        cluster.clearMarkers();
+        filterView();
     }
 }
 
