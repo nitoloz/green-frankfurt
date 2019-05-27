@@ -126,15 +126,14 @@ function appendMultiSelect(values) {
 }
 
 function filterView() {
+    const selectedItems = selectDropdown[0].selectize.items;
+    const filteredData = selectedItems.length > 0 ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1) : processedData;
     if (view === 'heatmap') {
-        const selectedItems = selectDropdown[0].selectize.items;
-        heatmap.setData(processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
-            .map(d => new google.maps.LatLng(d.lat, d.lng)))
+        heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
         if (numberOfSelectedTrees < 15000) {
             cluster.clearMarkers();
-            const selectedItems = selectDropdown[0].selectize.items;
-            const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
+            const markers = filteredData.map(function (location, i) {
                 return new google.maps.Marker({
                     position: {lat: location.lat, lng: location.lng},
                     icon: {
@@ -175,12 +174,15 @@ function changeView() {
             });
             cluster.addMarkers(markers);
         } else {
-
+            cluster.clearMarkers();
+            filterView();
+            heatmap.setMap(map);
         }
     } else {
         view = 'heatmap';
         cluster.clearMarkers();
         filterView();
+        heatmap.setMap(map);
     }
 }
 
