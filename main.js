@@ -2,7 +2,9 @@ const utm = "+proj=utm +zone=32";
 const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 let coordinates, map, heatmap, selectDropdown;
 let processedData = [];
-// let view = 'heatmap';
+let view = 'heatmap';
+let internalMap;
+
 // let cluster;
 
 function initMap() {
@@ -30,15 +32,22 @@ function initMap() {
         let endTime = new Date().getTime();
         console.log("duration [ms] = " + (endTime - startTime));
 
-        const internalMap = new Map();
+        internalMap = new Map();
         processedData.forEach(d => {
             const [latinName, germanName] = d['Gattung/Art/Deutscher Name'].split('. ');
-            d['germanName'] = germanName;
-            d['latinName'] = latinName;
-            internalMap[d['Gattung/Art/Deutscher Name']] ? internalMap[d['Gattung/Art/Deutscher Name']]++ : internalMap[d['Gattung/Art/Deutscher Name']] = 1;
+            d.germanName = germanName;
+            d.latinName = latinName;
+            internalMap[d.germanName]
+                ? internalMap[d.germanName].count++
+                : internalMap[d.germanName] = {count: 1, latinName, germanName};
         });
         const values = Object.keys(internalMap).map((key) => {
-            return {value: key, count: internalMap[key]};
+            return {
+                value: key,
+                count: internalMap[key].count,
+                latinName: internalMap[key].latinName,
+                germanName: internalMap[key].germanName
+            };
         }).sort((a, b) => b.count - a.count);
         selectDropdown[0].selectize.addOption(values);
         // const markers = processedData.map(function (location, i) {
@@ -95,30 +104,34 @@ function appendMultiSelect(values) {
         render: {
             option: function (data, escape) {
                 return `<div class="option">
-                                <span class="title">${escape(data.value)}</span>
+                                <span class="title">${escape(data.germanName)}</span>
                                 <span class="url"> (${escape(data.count)})</span>
+                                <div class="url">${escape(data.latinName)}</div>
                             </div>`;
             },
             item: function (data, escape) {
-                return '<div class="item">' + escape(data.value) + '</div>';
+                return `<div>${escape(data.germanName)} (${escape(data.count)})</div>`;
             }
+        },
+        onItemAdd: function (value, $item) {
+            console.log(this.items.map(item => internalMap[item].count).reduce((a, b) => a + b));
+        },
+        onItemRemove: function (value, $item) {
+            console.log(this.items.map(item => internalMap[item].count).reduce((a, b) => a + b));
         }
-
     });
 }
 
 function filterView() {
-    console.log(selectDropdown[0].selectize.items);
     const selectedItems = selectDropdown[0].selectize.items;
-    heatmap.setData(processedData.filter(d => selectedItems.indexOf(d['Gattung/Art/Deutscher Name']) !== -1)
+    heatmap.setData(processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
         .map(d => new google.maps.LatLng(d.lat, d.lng)))
 }
 
 function changeView() {
     heatmap.setMap(null);
-    console.log(selectDropdown[0].selectize.items);
     const selectedItems = selectDropdown[0].selectize.items;
-    const markers = processedData.filter(d => selectedItems.indexOf(d['Gattung/Art/Deutscher Name']) !== -1).map(function (location, i) {
+    const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
         return new google.maps.Marker({
             position: {lat: location.lat, lng: location.lng},
             icon: {
