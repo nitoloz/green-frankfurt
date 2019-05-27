@@ -1,11 +1,8 @@
 const utm = "+proj=utm +zone=32";
 const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
-let coordinates, map, heatmap, selectDropdown;
+let coordinates, map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = 'heatmap';
-let internalMap;
-
-// let cluster;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -114,10 +111,10 @@ function appendMultiSelect(values) {
             }
         },
         onItemAdd: function (value, $item) {
-            console.log(this.items.map(item => internalMap[item].count).reduce((a, b) => a + b));
+            numberOfSelectedTrees = this.items.map(item => internalMap[item].count).reduce((a, b) => a + b);
         },
         onItemRemove: function (value, $item) {
-            console.log(this.items.map(item => internalMap[item].count).reduce((a, b) => a + b));
+            numberOfSelectedTrees = this.items.map(item => internalMap[item].count).reduce((a, b) => a + b);
         }
     });
 }
@@ -129,25 +126,38 @@ function filterView() {
 }
 
 function changeView() {
-    heatmap.setMap(null);
-    const selectedItems = selectDropdown[0].selectize.items;
-    const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
-        return new google.maps.Marker({
-            position: {lat: location.lat, lng: location.lng},
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 5,
-                fillColor: "green",
-                fillOpacity: 0.4,
-                strokeWeight: 0.4
+    if (numberOfSelectedTrees < 15000) {
+        if (view === 'heatmap') {
+            view = 'cluster';
+            heatmap.setMap(null);
+            const selectedItems = selectDropdown[0].selectize.items;
+            const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
+                return new google.maps.Marker({
+                    position: {lat: location.lat, lng: location.lng},
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "red",
+                        fillOpacity: 0.4,
+                        strokeWeight: 0.4
+                    }
+                });
+            });
+            if (!cluster) {
+                cluster = new MarkerClusterer(map, markers,
+                    {
+                        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                        minimumClusterSize: 25
+                    });
+            } else {
+                cluster.addMarkers(markers);
             }
-        });
-    });
-    cluster = new MarkerClusterer(map, markers,
-        {
-            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-            minimumClusterSize: 25
-        });
+        } else {
+            view = 'heatmap';
+            cluster.clearMarkers();
+            heatmap.setMap(map);
+        }
+    }
 }
 
 function processCoordinates(data) {
