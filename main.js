@@ -125,7 +125,7 @@ function appendMultiSelect(values) {
     });
 }
 
-function filterView() {
+function showFilteredData() {
     const selectedItems = selectDropdown[0].selectize.items;
     const filteredData = selectedItems.length > 0 ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1) : processedData;
     if (view === 'heatmap') {
@@ -133,25 +133,12 @@ function filterView() {
     } else {
         if (numberOfSelectedTrees < 15000) {
             cluster.clearMarkers();
-            const markers = filteredData.map(function (location, i) {
-                return new google.maps.Marker({
-                    position: {lat: location.lat, lng: location.lng},
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "red",
-                        fillOpacity: 0.4,
-                        strokeWeight: 0.4
-                    }
-                });
-            });
-            cluster.addMarkers(markers);
+            showMarkerCluster(filteredData);
         } else {
             const selectedItems = selectDropdown[0].selectize.items;
             cluster.clearMarkers();
+            heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
             heatmap.setMap(map);
-            heatmap.setData(processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
-                .map(d => new google.maps.LatLng(d.lat, d.lng)))
         }
     }
 }
@@ -161,29 +148,16 @@ function changeView() {
         if (numberOfSelectedTrees < 15000) {
             view = 'cluster';
             heatmap.setMap(null);
-            const selectedItems = selectDropdown[0].selectize.items;
-            const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
-                return new google.maps.Marker({
-                    position: {lat: location.lat, lng: location.lng},
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "red",
-                        fillOpacity: 0.4,
-                        strokeWeight: 0.4
-                    }
-                });
-            });
-            cluster.addMarkers(markers);
+            showFilteredData();
         } else {
             cluster.clearMarkers();
-            filterView();
+            showFilteredData();
             heatmap.setMap(map);
         }
     } else {
         view = 'heatmap';
         cluster.clearMarkers();
-        filterView();
+        showFilteredData();
         heatmap.setMap(map);
     }
 }
@@ -193,4 +167,20 @@ function processCoordinates(data) {
         coordinates = proj4(utm, wgs84, [parseFloat(d.RECHTSWERT), parseFloat(d.HOCHWERT)]);
         return {...d, ...{'lat': coordinates[1], 'lng': coordinates[0]}};
     });
+}
+
+function showMarkerCluster(filteredData) {
+    const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
+        return new google.maps.Marker({
+            position: {lat: location.lat, lng: location.lng},
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 5,
+                fillColor: "red",
+                fillOpacity: 0.4,
+                strokeWeight: 0.4
+            }
+        });
+    });
+    cluster.addMarkers(markers);
 }
