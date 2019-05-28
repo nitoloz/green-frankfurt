@@ -148,6 +148,8 @@ function filterView() {
             cluster.addMarkers(markers);
         } else {
             const selectedItems = selectDropdown[0].selectize.items;
+            cluster.clearMarkers();
+            heatmap.setMap(map);
             heatmap.setData(processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
                 .map(d => new google.maps.LatLng(d.lat, d.lng)))
         }
