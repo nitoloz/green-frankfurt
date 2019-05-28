@@ -170,7 +170,7 @@ function processCoordinates(data) {
 }
 
 function showMarkerCluster(filteredData) {
-    const markers = processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1).map(function (location, i) {
+    const markers = filteredData.map(function (location, i) {
         return new google.maps.Marker({
             position: {lat: location.lat, lng: location.lng},
             icon: {
