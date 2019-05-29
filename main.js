@@ -47,24 +47,7 @@ function initMap() {
             };
         }).sort((a, b) => b.count - a.count);
         selectDropdown[0].selectize.addOption(values);
-        // const markers = processedData.map(function (location, i) {
-        //     return new google.maps.Marker({
-        //         position: {lat: location.lat, lng: location.lng},
-        //         icon: {
-        //             path: google.maps.SymbolPath.CIRCLE,
-        //             scale: 5,
-        //             fillColor: "green",
-        //             fillOpacity: 0.4,
-        //             strokeWeight: 0.4
-        //         }
-        //     });
-        // });
-        // // Add a marker clusterer to manage the markers.
-        // cluster = new MarkerClusterer(map, markers,
-        //     {
-        //         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-        //         minimumClusterSize: 25
-        //     });
+
         heatmap = new google.maps.visualization.HeatmapLayer({
             data: processedData.map(d => new google.maps.LatLng(d.lat, d.lng)),
             map: map,
@@ -135,7 +118,6 @@ function showFilteredData() {
             cluster.clearMarkers();
             showMarkerCluster(filteredData);
         } else {
-            const selectedItems = selectDropdown[0].selectize.items;
             cluster.clearMarkers();
             heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
             heatmap.setMap(map);
@@ -177,8 +159,8 @@ function showMarkerCluster(filteredData) {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 5,
                 fillColor: "red",
-                fillOpacity: 0.4,
-                strokeWeight: 0.4
+                fillOpacity: 1,
+                strokeWeight: 1
             }
         });
     });
