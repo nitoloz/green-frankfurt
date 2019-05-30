@@ -98,28 +98,29 @@ function showFilteredData() {
     if (view === 'heatmap') {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
-        // if (numberOfSelectedTrees < 15000) {
+        if (numberOfSelectedTrees < 15000) {
             cluster.clearMarkers();
             showMarkerCluster(filteredData);
-        // } else {
-        //     cluster.clearMarkers();
-        //     heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
-        //     heatmap.setMap(map);
-        // }
+        } else {
+            cluster.clearMarkers();
+            heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
+            heatmap.setMap(map);
+            view = 'heatmap';
+        }
     }
 }
 
 function changeView() {
     if (view === 'heatmap') {
-        // if (numberOfSelectedTrees < 15000) {
+        if (numberOfSelectedTrees < 15000) {
             view = 'cluster';
             heatmap.setMap(null);
             showFilteredData();
-        // } else {
-        //     cluster.clearMarkers();
-        //     showFilteredData();
-        //     heatmap.setMap(map);
-        // }
+        } else {
+            cluster.clearMarkers();
+            showFilteredData();
+            heatmap.setMap(map);
+        }
     } else {
         view = 'heatmap';
         cluster.clearMarkers();
@@ -136,9 +137,12 @@ function processCoordinates(data) {
 }
 
 function showMarkerCluster(filteredData) {
-    const markers = filteredData.map(function (location, i) {
-        return new google.maps.Marker({
-            position: {lat: location.lat, lng: location.lng},
+    const markers = filteredData.map(function (treeInfo, i) {
+        const infoWindow = new google.maps.InfoWindow({
+            content: `<span>${treeInfo.germanName}</span>`
+        });
+        const marker = new google.maps.Marker({
+            position: {lat: treeInfo.lat, lng: treeInfo.lng},
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 5,
@@ -147,6 +151,10 @@ function showMarkerCluster(filteredData) {
                 strokeWeight: 1
             }
         });
+        marker.addListener('click', function() {
+            infoWindow.open(map, marker);
+        });
+        return marker;
     });
     cluster.addMarkers(markers);
 }
