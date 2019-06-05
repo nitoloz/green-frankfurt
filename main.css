@@ -33,3 +33,9 @@ html, body {
 .main-container {
     height: 100%;
 }
+
+.filter-badge{
+    cursor: pointer;
+    font-size: 17px;
+    margin: 0 2px;
+}

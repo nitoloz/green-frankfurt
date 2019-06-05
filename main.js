@@ -167,10 +167,13 @@ function showMarkerCluster(filteredData) {
 
 function addBadges() {
     treeSpecies.forEach(species => {
-        let filterSpan = document.createElement("a");
+        let filterSpan = document.createElement("span");
         filterSpan.className = 'badge badge-secondary filter-badge';
-        filterSpan.href = '#';
         filterSpan.innerHTML = `${species}`;
+        filterSpan.onclick = function (event) {
+           console.log(this.innerText);
+        };
+
         document.getElementById("badges").appendChild(filterSpan);
     })
 }
