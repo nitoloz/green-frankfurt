@@ -3,6 +3,7 @@ const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 let coordinates, map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = 'heatmap';
+const treeSpecies = ['Alder', 'Ash', 'Beech', 'Birch', 'Elder'];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -21,6 +22,7 @@ function initMap() {
     });
 
     appendMultiSelect([]);
+    addBadges();
 
     d3.csv("data.csv").then(data => {
         console.log("start processing");
@@ -155,10 +157,20 @@ function showMarkerCluster(filteredData) {
                 strokeWeight: 1
             }
         });
-        marker.addListener('click', function() {
+        marker.addListener('click', function () {
             infoWindow.open(map, marker);
         });
         return marker;
     });
     cluster.addMarkers(markers);
+}
+
+function addBadges() {
+    treeSpecies.forEach(species => {
+        let filterSpan = document.createElement("a");
+        filterSpan.className = 'badge badge-secondary filter-badge';
+        filterSpan.href = '#';
+        filterSpan.innerHTML = `${species}`;
+        document.getElementById("badges").appendChild(filterSpan);
+    })
 }
