@@ -3,7 +3,8 @@ const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 let coordinates, map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = 'heatmap';
-const treeSpecies = ['Alder', 'Ash', 'Beech', 'Birch', 'Elder'];
+const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer', 'Kirsche',
+    'Linde', 'Olivenbaum', 'Plantane', 'Robinie', 'Schwarzpappel', 'Ulme', 'Weide'];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -94,9 +95,12 @@ function appendMultiSelect(values) {
     });
 }
 
-function showFilteredData() {
-    const selectedItems = selectDropdown[0].selectize.items;
-    const filteredData = selectedItems.length > 0 ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1) : processedData;
+function showFilteredData(selectedItems) {
+    const filteredData = selectedItems
+        ? selectedItems.length > 0
+            ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
+            : processedData
+        : processedData.filter(d => selectDropdown[0].selectize.items.indexOf(d.germanName) !== -1);
     if (view === 'heatmap') {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
@@ -113,20 +117,21 @@ function showFilteredData() {
 }
 
 function changeView() {
+    const selectedItems = selectDropdown[0].selectize.items;
     if (view === 'heatmap') {
         if (numberOfSelectedTrees < 15000) {
             view = 'cluster';
             heatmap.setMap(null);
-            showFilteredData();
+            showFilteredData(selectedItems);
         } else {
             cluster.clearMarkers();
-            showFilteredData();
+            showFilteredData(selectedItems);
             heatmap.setMap(map);
         }
     } else {
         view = 'heatmap';
         cluster.clearMarkers();
-        showFilteredData();
+        showFilteredData(selectedItems);
         heatmap.setMap(map);
     }
 }
@@ -171,7 +176,7 @@ function addBadges() {
         filterSpan.className = 'badge badge-secondary filter-badge';
         filterSpan.innerHTML = `${species}`;
         filterSpan.onclick = function (event) {
-           console.log(this.innerText);
+            console.log(this.innerText);
         };
 
         document.getElementById("badges").appendChild(filterSpan);
