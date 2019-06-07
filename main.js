@@ -27,22 +27,31 @@ function initMap() {
     appendMultiSelect([]);
     addBadges();
 
-    d3.csv("data.csv").then(data => {
-        console.log("start processing");
-        let startTime = new Date().getTime();
-        processedData = processCoordinates(data);
-        let endTime = new Date().getTime();
-        console.log("duration [ms] = " + (endTime - startTime));
-
+    d3.csv("processed.csv").then(data => {
+        // console.log("start processing");
+        // let endTime = new Date().getTime();
+        // console.log("duration [ms] = " + (endTime - startTime));
+        processedData = data;
         internalMap = new Map();
         processedData.forEach(d => {
-            const [latinName, germanName] = d['Gattung/Art/Deutscher Name'].split('. ');
-            d.germanName = germanName;
-            d.latinName = latinName;
             internalMap[d.germanName]
                 ? internalMap[d.germanName].count++
-                : internalMap[d.germanName] = {count: 1, latinName, germanName};
+                : internalMap[d.germanName] = {count: 1, latinName:d.latinName, germanName:d.germanName};
         });
+
+        // let csvContent = "data:text/csv;charset=utf-8,";
+        // csvContent += Object.keys(processedData[0]).join(",") + "\r\n";
+        // processedData.forEach(function(tree) {
+        //     let row =  Object.keys(tree).map(key => tree[key]).join(",");
+        //     csvContent += row + "\r\n";
+        // });
+        // let encodedUri = encodeURI(csvContent);
+        // let link = document.createElement("a");
+        // link.setAttribute("href", encodedUri);
+        // link.setAttribute("download", "my_data.csv");
+        // document.body.appendChild(link);
+        // link.click();
+
         availableTreeSpecies = Object.keys(internalMap);
         const values = availableTreeSpecies.map((key) => {
             return {
@@ -187,11 +196,9 @@ function addBadges() {
                 selectedTreeSpecies.splice(index, 1);
                 this.className = this.className.replace('primary', 'secondary');
             }
-            const filteredByBadges = availableTreeSpecies.filter(species => {
-                return selectedTreeSpecies.some(selectedSpecies => species.indexOf(selectedSpecies)!==-1);
-            });
-            selectDropdown[0].selectize.setValue(filteredByBadges);
-            console.log(selectedTreeSpecies);
+            selectDropdown[0].selectize.setValue(availableTreeSpecies.filter(species => {
+                return selectedTreeSpecies.some(selectedSpecies => species.indexOf(selectedSpecies) !== -1);
+            }));
         };
 
         document.getElementById("badges").appendChild(filterSpan);
