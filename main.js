@@ -5,6 +5,7 @@ let processedData = [];
 let view = 'heatmap';
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer', 'Kirsche',
     'Linde', 'Olivenbaum', 'Plantane', 'Robinie', 'Schwarzpappel', 'Ulme', 'Weide'];
+let selectedTreeSpecies = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -104,7 +105,7 @@ function showFilteredData(selectedItems) {
     if (view === 'heatmap') {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
-        if (numberOfSelectedTrees < 15000) {
+        if (numberOfSelectedTrees < 25000) {
             cluster.clearMarkers();
             showMarkerCluster(filteredData);
         } else {
@@ -119,7 +120,7 @@ function showFilteredData(selectedItems) {
 function changeView() {
     const selectedItems = selectDropdown[0].selectize.items;
     if (view === 'heatmap') {
-        if (numberOfSelectedTrees < 15000) {
+        if (numberOfSelectedTrees < 25000) {
             view = 'cluster';
             heatmap.setMap(null);
             showFilteredData(selectedItems);
@@ -173,10 +174,18 @@ function showMarkerCluster(filteredData) {
 function addBadges() {
     treeSpecies.forEach(species => {
         let filterSpan = document.createElement("span");
-        filterSpan.className = 'badge badge-secondary filter-badge';
+        filterSpan.className = 'badge badge-secondary filter-badge flex-grow-1';
         filterSpan.innerHTML = `${species}`;
         filterSpan.onclick = function (event) {
-            console.log(this.innerText);
+            const index = selectedTreeSpecies.indexOf(this.innerText);
+            if (index === -1) {
+                selectedTreeSpecies.push(this.innerText);
+                this.className = this.className.replace('secondary', 'primary');
+            } else {
+                selectedTreeSpecies.splice(index, 1);
+                this.className = this.className.replace('primary', 'secondary');
+            }
+            console.log(selectedTreeSpecies);
         };
 
         document.getElementById("badges").appendChild(filterSpan);
