@@ -6,6 +6,7 @@ let view = 'heatmap';
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer', 'Kirsche',
     'Linde', 'Olivenbaum', 'Plantane', 'Robinie', 'Schwarzpappel', 'Ulme', 'Weide'];
 let selectedTreeSpecies = [];
+let availableTreeSpecies = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -42,7 +43,8 @@ function initMap() {
                 ? internalMap[d.germanName].count++
                 : internalMap[d.germanName] = {count: 1, latinName, germanName};
         });
-        const values = Object.keys(internalMap).map((key) => {
+        availableTreeSpecies = Object.keys(internalMap);
+        const values = availableTreeSpecies.map((key) => {
             return {
                 value: key,
                 count: internalMap[key].count,
@@ -185,6 +187,10 @@ function addBadges() {
                 selectedTreeSpecies.splice(index, 1);
                 this.className = this.className.replace('primary', 'secondary');
             }
+            const filteredByBadges = availableTreeSpecies.filter(species => {
+                return selectedTreeSpecies.some(selectedSpecies => species.indexOf(selectedSpecies)!==-1);
+            });
+            selectDropdown[0].selectize.setValue(filteredByBadges);
             console.log(selectedTreeSpecies);
         };
 
