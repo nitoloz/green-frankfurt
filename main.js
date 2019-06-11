@@ -121,7 +121,7 @@ function showFilteredData(selectedItems) {
             showMarkerCluster(filteredData);
         } else {
             cluster.clearMarkers();
-            heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
+            heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)));
             heatmap.setMap(map);
             view = 'heatmap';
         }
@@ -158,14 +158,14 @@ function processCoordinates(data) {
 function showMarkerCluster(filteredData) {
     const markers = filteredData.map(function (treeInfo, i) {
         const infoWindow = new google.maps.InfoWindow({
-            content: `<span>German name: ${treeInfo.germanName}</span></br>
+            content: `<span>German name: ${treeInfo.germanName}</span><a href=”http://www.google.com/search?q="${data.germanName}> Google it!</a></br>
                         <span>Latin name: ${treeInfo.latinName}</span></br>
                         <span>Planting year: ${treeInfo.Pflanzjahr}</span></br>
                         <span>Crown diameter: ${treeInfo.Kronendurchmesser}m.</span></br>
                         <span>Location: ${treeInfo.Objekt}</span>`
         });
         const marker = new google.maps.Marker({
-            position: {lat: treeInfo.lat, lng: treeInfo.lng},
+            position: {lat: parseFloat(treeInfo.lat), lng: parseFloat(treeInfo.lng)},
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 5,
