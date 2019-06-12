@@ -158,7 +158,7 @@ function processCoordinates(data) {
 function showMarkerCluster(filteredData) {
     const markers = filteredData.map(function (treeInfo, i) {
         const infoWindow = new google.maps.InfoWindow({
-            content: `<span>German name: ${treeInfo.germanName}</span><a target="_blank" rel="noopener noreferrer" href=”http://www.google.com/search?q="${treeInfo.germanName}"> Google it!</a></br>
+            content: `<span>German name: ${treeInfo.germanName}</span><a target="_blank" rel="noopener noreferrer" href="http://www.google.com/search?q=${treeInfo.germanName}"> (Google it!)</a></br>
                         <span>Latin name: ${treeInfo.latinName}</span></br>
                         <span>Planting year: ${treeInfo.Pflanzjahr}</span></br>
                         <span>Crown diameter: ${treeInfo.Kronendurchmesser}m.</span></br>
