@@ -4,7 +4,7 @@ let coordinates, map, heatmap, selectDropdown, internalMap, numberOfSelectedTree
 let processedData = [];
 let view = 'heatmap';
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer', 'Kirsche',
-    'Linde', 'Olivenbaum', 'Plantane', 'Robinie', 'Schwarzpappel', 'Ulme', 'Weide'];
+    'Linde', 'Olivenbaum', 'Platane', 'Robinie', 'Schwarzpappel', 'Ulme', 'Weide'];
 let selectedTreeSpecies = [];
 let availableTreeSpecies = [];
 
@@ -28,9 +28,6 @@ function initMap() {
     addBadges();
 
     d3.csv("processed.csv").then(data => {
-        // console.log("start processing");
-        // let endTime = new Date().getTime();
-        // console.log("duration [ms] = " + (endTime - startTime));
         processedData = data;
         internalMap = new Map();
         processedData.forEach(d => {
@@ -38,19 +35,6 @@ function initMap() {
                 ? internalMap[d.germanName].count++
                 : internalMap[d.germanName] = {count: 1, latinName:d.latinName, germanName:d.germanName};
         });
-
-        // let csvContent = "data:text/csv;charset=utf-8,";
-        // csvContent += Object.keys(processedData[0]).join(",") + "\r\n";
-        // processedData.forEach(function(tree) {
-        //     let row =  Object.keys(tree).map(key => tree[key]).join(",");
-        //     csvContent += row + "\r\n";
-        // });
-        // let encodedUri = encodeURI(csvContent);
-        // let link = document.createElement("a");
-        // link.setAttribute("href", encodedUri);
-        // link.setAttribute("download", "my_data.csv");
-        // document.body.appendChild(link);
-        // link.click();
 
         availableTreeSpecies = Object.keys(internalMap);
         const values = availableTreeSpecies.map((key) => {
