@@ -132,12 +132,6 @@ function changeView() {
     }
 }
 
-function processCoordinates(data) {
-    return data.map((d, i) => {
-        coordinates = proj4(utm, wgs84, [parseFloat(d.RECHTSWERT), parseFloat(d.HOCHWERT)]);
-        return {...d, ...{'lat': coordinates[1], 'lng': coordinates[0]}};
-    });
-}
 
 function showMarkerCluster(filteredData) {
     const markers = filteredData.map(function (treeInfo, i) {
