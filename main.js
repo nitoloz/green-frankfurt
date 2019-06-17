@@ -1,6 +1,4 @@
-const utm = "+proj=utm +zone=32";
-const wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
-let coordinates, map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
+let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = 'heatmap';
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer', 'Kirsche',
@@ -83,10 +81,12 @@ function appendMultiSelect(values) {
         },
         onItemAdd: function (value, $item) {
             numberOfSelectedTrees = this.items.map(item => internalMap[item].count).reduce((a, b) => a + b);
+            document.getElementById('show-selected').innerHTML = `Show ${numberOfSelectedTrees} trees!`;
         },
         onItemRemove: function (value, $item) {
             const countsArray = this.items.map(item => internalMap[item].count);
             numberOfSelectedTrees = countsArray.length > 0 ? countsArray.reduce((a, b) => a + b) : 0;
+            document.getElementById('show-selected').innerHTML = `Show ${numberOfSelectedTrees} trees!`;
         }
     });
 }
