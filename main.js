@@ -21,6 +21,7 @@ function initMap() {
             }
         ]
     });
+    // map.data.loadGeoJson('frankfurt.geojson');
 
     appendMultiSelect([]);
     addBadges();
