@@ -32,7 +32,7 @@ function initMap() {
         processedData.forEach(d => {
             internalMap[d.germanName]
                 ? internalMap[d.germanName].count++
-                : internalMap[d.germanName] = {count: 1, latinName:d.latinName, germanName:d.germanName};
+                : internalMap[d.germanName] = {count: 1, latinName: d.latinName, germanName: d.germanName};
         });
 
         availableTreeSpecies = Object.keys(internalMap);
@@ -135,14 +135,11 @@ function changeView() {
 
 
 function showMarkerCluster(filteredData) {
+    const infoWindow = new google.maps.InfoWindow({
+        content: ``
+    });
     const markers = filteredData.map(function (treeInfo, i) {
-        const infoWindow = new google.maps.InfoWindow({
-            content: `<span>German name: ${treeInfo.germanName}</span><a target="_blank" rel="noopener noreferrer" href="http://www.google.com/search?q=${treeInfo.germanName}"> (Google it!)</a></br>
-                        <span>Latin name: ${treeInfo.latinName}</span></br>
-                        <span>Planting year: ${treeInfo.Pflanzjahr}</span></br>
-                        <span>Crown diameter: ${treeInfo.Kronendurchmesser}m.</span></br>
-                        <span>Location: ${treeInfo.Objekt}</span>`
-        });
+
         const marker = new google.maps.Marker({
             position: {lat: parseFloat(treeInfo.lat), lng: parseFloat(treeInfo.lng)},
             icon: {
@@ -154,6 +151,11 @@ function showMarkerCluster(filteredData) {
             }
         });
         marker.addListener('click', function () {
+            infoWindow.setContent(`<span>German name: ${treeInfo.germanName}</span><a target="_blank" rel="noopener noreferrer" href="http://www.google.com/search?q=${treeInfo.germanName}"> (Google it!)</a></br>
+                        <span>Latin name: ${treeInfo.latinName}</span></br>
+                        <span>Planting year: ${treeInfo.Pflanzjahr}</span></br>
+                        <span>Crown diameter: ${treeInfo.Kronendurchmesser}m.</span></br>
+                        <span>Location: ${treeInfo.Objekt}</span>`);
             infoWindow.open(map, marker);
         });
         return marker;
