@@ -2,7 +2,7 @@ let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = 'heatmap';
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer', 'Kirsche',
-    'Linde', 'Magnolie', 'Platane', 'Robinie', 'Schwarzpappel', 'Ulme', 'Walnuss', 'Weide'];
+    'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
 let selectedTreeSpecies = [];
 let availableTreeSpecies = [];
 
