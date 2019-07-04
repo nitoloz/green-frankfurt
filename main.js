@@ -1,8 +1,16 @@
 let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = 'heatmap';
-const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer', 'Kirsche',
-    'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
+const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer',
+    'Kirsche', 'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
+
+const cityDistricts = ['Altstadt', 'Bahnhofsviertel', 'Bergen-Enkheim', 'Berkersheim', 'Bockenheim', 'Bonames', 'Bornheim',
+    'Dornbusch', 'Eckenheim', 'Eschersheim', 'Fechenheim', 'Flughafen', 'Frankfurter Berg', 'Gallus', 'Ginnheim', 'Griesheim',
+    'Gutleutviertel', 'Harheim', 'Hausen', 'Heddernheim', 'Höchst', 'Innenstadt', 'Kalbach-Riedberg', 'Nied', 'Nieder-Erlenbach',
+    'Nieder-Eschbach', 'Niederrad', 'Niederursel', 'Nordend-Ost', 'Nordend-West', 'Oberrad', 'Ostend', 'Praunheim', 'Preungesheim',
+    'Riederwald', 'Rödelheim', 'Sachsenhausen-N.', 'Sachsenhausen-S.', 'Schwanheim', 'Seckbach', 'Sindlingen', 'Sossenheim',
+    'Unterliederbach', 'Westend-Nord', 'Westend-Süd', 'Zeilsheim'];
+
 let selectedTreeSpecies = [];
 let availableTreeSpecies = [];
 
@@ -23,6 +31,8 @@ function initMap() {
     });
     map.data.loadGeoJson('frankfurt.geojson');
     map.data.setStyle({visible: false});
+    // TODO use after geojson initialization!!!
+    // map.data.getFeatureById('Altstadt')
     appendMultiSelect([]);
     addBadges();
 
@@ -180,6 +190,6 @@ function addBadges() {
             }));
         };
 
-        document.getElementById("badges").appendChild(filterSpan);
+        document.getElementById("species-badges").appendChild(filterSpan);
     })
 }
