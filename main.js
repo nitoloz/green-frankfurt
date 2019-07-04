@@ -21,8 +21,8 @@ function initMap() {
             }
         ]
     });
-    // map.data.loadGeoJson('frankfurt.geojson');
-
+    map.data.loadGeoJson('frankfurt.geojson');
+    map.data.setStyle({visible: false});
     appendMultiSelect([]);
     addBadges();
 
@@ -135,9 +135,7 @@ function changeView() {
 
 
 function showMarkerCluster(filteredData) {
-    const infoWindow = new google.maps.InfoWindow({
-        content: ``
-    });
+    const infoWindow = new google.maps.InfoWindow({content: ``});
     const markers = filteredData.map(function (treeInfo, i) {
 
         const marker = new google.maps.Marker({
