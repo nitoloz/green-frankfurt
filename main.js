@@ -34,7 +34,7 @@ function initMap() {
     // TODO use after geojson initialization!!!
     // map.data.getFeatureById('Altstadt')
     appendMultiSelect([]);
-    addBadges();
+    addTreeSpeciesBadges();
 
     d3.csv("processed.csv").then(data => {
         processedData = data;
@@ -171,7 +171,7 @@ function showMarkerCluster(filteredData) {
     cluster.addMarkers(markers);
 }
 
-function addBadges() {
+function addTreeSpeciesBadges() {
     treeSpecies.forEach(species => {
         let filterSpan = document.createElement("span");
         filterSpan.className = 'badge badge-secondary filter-badge flex-grow-1';
@@ -191,5 +191,28 @@ function addBadges() {
         };
 
         document.getElementById("species-badges").appendChild(filterSpan);
+    })
+}
+
+function addCityDistrictsBadges() {
+    cityDistricts.forEach(disctrict => {
+        let filterSpan = document.createElement("span");
+        filterSpan.className = 'badge badge-secondary filter-badge flex-grow-1';
+        filterSpan.innerHTML = `${disctrict}`;
+        filterSpan.onclick = function (event) {
+            // const index = selectedTreeSpecies.indexOf(this.innerText);
+            // if (index === -1) {
+            //     selectedTreeSpecies.push(this.innerText);
+            //     this.className = this.className.replace('secondary', 'primary');
+            // } else {
+            //     selectedTreeSpecies.splice(index, 1);
+            //     this.className = this.className.replace('primary', 'secondary');
+            // }
+            // selectDropdown[0].selectize.setValue(availableTreeSpecies.filter(species => {
+            //     return selectedTreeSpecies.some(selectedSpecies => species.indexOf(selectedSpecies) !== -1);
+            // }));
+        };
+
+        document.getElementById("district-badges").appendChild(filterSpan);
     })
 }
