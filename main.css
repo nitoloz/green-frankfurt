@@ -43,3 +43,11 @@ html, body {
 .padding-bottom-4{
     padding-bottom: 4px;
 }
+
+.hidden{
+    display: none;
+}
+
+.visible{
+    display: flex;
+}

@@ -1,6 +1,13 @@
+const FilterType = {
+    TREE_SPECIES: 1,
+    CITY_DISTRICTS: 2
+};
+
 let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = 'heatmap';
+let filterType = FilterType.TREE_SPECIES;
+
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer',
     'Kirsche', 'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
 
@@ -140,6 +147,18 @@ function changeView() {
         cluster.clearMarkers();
         showFilteredData(selectedItems);
         heatmap.setMap(map);
+    }
+}
+
+function changeFilters() {
+    if (filterType === FilterType.TREE_SPECIES) {
+        filterType = FilterType.CITY_DISTRICTS;
+        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "visible");
+        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bvisible\b/g, "hidden");
+    } else {
+        filterType = FilterType.TREE_SPECIES;
+        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "visible");
+        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bvisible\b/g, "hidden");
     }
 }
 
