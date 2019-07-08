@@ -2,10 +2,14 @@ const FilterType = {
     TREE_SPECIES: 1,
     CITY_DISTRICTS: 2
 };
+const MapType = {
+    HEATMAP: 1,
+    CLUSTER: 2
+};
 
 let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
-let view = 'heatmap';
+let view = MapType.HEATMAP;
 let filterType = FilterType.TREE_SPECIES;
 
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer',
@@ -20,6 +24,7 @@ const cityDistricts = ['Altstadt', 'Bahnhofsviertel', 'Bergen-Enkheim', 'Berkers
 
 let selectedTreeSpecies = [];
 let availableTreeSpecies = [];
+let selectedCityDistricts = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -42,6 +47,7 @@ function initMap() {
     // map.data.getFeatureById('Altstadt')
     appendMultiSelect([]);
     addTreeSpeciesBadges();
+    addCityDistrictsBadges();
 
     d3.csv("processed.csv").then(data => {
         processedData = data;
@@ -115,7 +121,7 @@ function showFilteredData(selectedItems) {
             ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
             : processedData
         : processedData.filter(d => selectDropdown[0].selectize.items.indexOf(d.germanName) !== -1);
-    if (view === 'heatmap') {
+    if (view === MapType.HEATMAP) {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
         if (numberOfSelectedTrees < 25000) {
@@ -125,16 +131,16 @@ function showFilteredData(selectedItems) {
             cluster.clearMarkers();
             heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)));
             heatmap.setMap(map);
-            view = 'heatmap';
+            view =  MapType.HEATMAP;
         }
     }
 }
 
 function changeView() {
     const selectedItems = selectDropdown[0].selectize.items;
-    if (view === 'heatmap') {
+    if (view ===  MapType.HEATMAP) {
         if (numberOfSelectedTrees < 25000) {
-            view = 'cluster';
+            view = MapType.CLUSTER;
             heatmap.setMap(null);
             showFilteredData(selectedItems);
         } else {
@@ -143,7 +149,7 @@ function changeView() {
             heatmap.setMap(map);
         }
     } else {
-        view = 'heatmap';
+        view =  MapType.HEATMAP;
         cluster.clearMarkers();
         showFilteredData(selectedItems);
         heatmap.setMap(map);
@@ -219,17 +225,14 @@ function addCityDistrictsBadges() {
         filterSpan.className = 'badge badge-secondary filter-badge flex-grow-1';
         filterSpan.innerHTML = `${disctrict}`;
         filterSpan.onclick = function (event) {
-            // const index = selectedTreeSpecies.indexOf(this.innerText);
-            // if (index === -1) {
-            //     selectedTreeSpecies.push(this.innerText);
-            //     this.className = this.className.replace('secondary', 'primary');
-            // } else {
-            //     selectedTreeSpecies.splice(index, 1);
-            //     this.className = this.className.replace('primary', 'secondary');
-            // }
-            // selectDropdown[0].selectize.setValue(availableTreeSpecies.filter(species => {
-            //     return selectedTreeSpecies.some(selectedSpecies => species.indexOf(selectedSpecies) !== -1);
-            // }));
+            const index = selectedCityDistricts.indexOf(this.innerText);
+            if (index === -1) {
+                selectedCityDistricts.push(this.innerText);
+                this.className = this.className.replace('secondary', 'primary');
+            } else {
+                selectedCityDistricts.splice(index, 1);
+                this.className = this.className.replace('primary', 'secondary');
+            }
         };
 
         document.getElementById("district-badges").appendChild(filterSpan);

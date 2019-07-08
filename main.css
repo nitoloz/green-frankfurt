@@ -45,9 +45,9 @@ html, body {
 }
 
 .hidden{
-    display: none;
+    display: none !important;
 }
 
 .visible{
-    display: flex;
+    display: flex !important;
 }
