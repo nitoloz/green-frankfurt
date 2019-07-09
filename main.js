@@ -131,15 +131,17 @@ function showFilteredData(selectedItems) {
             cluster.clearMarkers();
             heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)));
             heatmap.setMap(map);
-            view =  MapType.HEATMAP;
+            view = MapType.HEATMAP;
         }
     }
 }
 
 function changeView() {
     const selectedItems = selectDropdown[0].selectize.items;
-    if (view ===  MapType.HEATMAP) {
+    if (view === MapType.HEATMAP) {
         if (numberOfSelectedTrees < 25000) {
+            document.getElementById("heatmap").className = document.getElementById("heatmap").className.replace(/\bactive\b/g, "");
+            document.getElementById("cluster").className += ' active';
             view = MapType.CLUSTER;
             heatmap.setMap(null);
             showFilteredData(selectedItems);
@@ -150,7 +152,9 @@ function changeView() {
             heatmap.setMap(map);
         }
     } else {
-        view =  MapType.HEATMAP;
+        document.getElementById("cluster").className = document.getElementById("cluster").className.replace(/\bactive\b/g, "");
+        document.getElementById("heatmap").className += ' active';
+        view = MapType.HEATMAP;
         cluster.clearMarkers();
         showFilteredData(selectedItems);
         heatmap.setMap(map);
@@ -160,10 +164,14 @@ function changeView() {
 function changeFilters() {
     if (filterType === FilterType.TREE_SPECIES) {
         filterType = FilterType.CITY_DISTRICTS;
+        document.getElementById("tree-species").className = document.getElementById("tree-species").className.replace(/\bactive\b/g, "");
+        document.getElementById("city-districts").className += ' active';
         document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "visible");
         document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bvisible\b/g, "hidden");
     } else {
         filterType = FilterType.TREE_SPECIES;
+        document.getElementById("city-districts").className = document.getElementById("city-districts").className.replace(/\bactive\b/g, "");
+        document.getElementById("tree-species").className += ' active';
         document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "visible");
         document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bvisible\b/g, "hidden");
     }

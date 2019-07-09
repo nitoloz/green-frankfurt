@@ -38,12 +38,12 @@
 <div class="container-fluid main-container">
     <div class="d-flex flex-row justify-content-between">
         <div class="btn-group btn-group-sm padding-bottom-4" role="group" aria-label="Change filters">
-            <button class="btn btn-primary active" onclick="changeFilters()">Tree Species</button>
-            <button class="btn btn-primary" onclick="changeFilters()">City Districts</button>
+            <button class="btn btn-primary active" id="tree-species" onclick="changeFilters()">Tree Species</button>
+            <button class="btn btn-primary"  id="city-districts" onclick="changeFilters()">City Districts</button>
         </div>
         <div class="btn-group btn-group-sm padding-bottom-4" role="group" aria-label="Change view">
-            <button class="btn btn-primary active" onclick="changeView()">Heatmap <i class="fas fa-fire"></i></button>
-            <button class="btn btn-primary" onclick="changeView()">Cluster <i class="fas fa-map-marker-alt"></i></button>
+            <button class="btn btn-primary active"  id="heatmap" onclick="changeView()">Heatmap <i class="fas fa-fire"></i></button>
+            <button class="btn btn-primary"  id="cluster" onclick="changeView()">Cluster <i class="fas fa-map-marker-alt"></i></button>
         </div>
     </div>
     <div class="d-flex flex-row flex-wrap mb-1 hidden" id="district-badges"></div>
