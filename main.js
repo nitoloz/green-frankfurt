@@ -144,6 +144,7 @@ function changeView() {
             heatmap.setMap(null);
             showFilteredData(selectedItems);
         } else {
+            alert("Cluster view is only available for sets below 25K trees!");
             cluster.clearMarkers();
             showFilteredData(selectedItems);
             heatmap.setMap(map);
