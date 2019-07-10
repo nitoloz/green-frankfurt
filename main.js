@@ -43,8 +43,7 @@ function initMap() {
     });
     map.data.loadGeoJson('frankfurt.geojson');
     map.data.setStyle({visible: false});
-    // TODO use after geojson initialization!!!
-    // map.data.getFeatureById('Altstadt')
+
     appendMultiSelect([]);
     addTreeSpeciesBadges();
     addCityDistrictsBadges();
@@ -210,7 +209,7 @@ function addTreeSpeciesBadges() {
         let filterSpan = document.createElement("span");
         filterSpan.className = 'badge badge-secondary filter-badge flex-grow-1';
         filterSpan.innerHTML = `${species}`;
-        filterSpan.onclick = function (event) {
+        filterSpan.onclick = function () {
             const index = selectedTreeSpecies.indexOf(this.innerText);
             if (index === -1) {
                 selectedTreeSpecies.push(this.innerText);
@@ -233,8 +232,10 @@ function addCityDistrictsBadges() {
         let filterSpan = document.createElement("span");
         filterSpan.className = 'badge badge-secondary filter-badge flex-grow-1';
         filterSpan.innerHTML = `${disctrict}`;
-        filterSpan.onclick = function (event) {
+        filterSpan.onclick = function () {
             const index = selectedCityDistricts.indexOf(this.innerText);
+            // TODO use after geojson initialization!!!
+            console.log(map.data.getFeatureById(this.innerText));
             if (index === -1) {
                 selectedCityDistricts.push(this.innerText);
                 this.className = this.className.replace('secondary', 'primary');
