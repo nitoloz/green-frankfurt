@@ -1,7 +1,7 @@
-const FilterType = {
-    TREE_SPECIES: 1,
-    CITY_DISTRICTS: 2
-};
+// const FilterType = {
+//     TREE_SPECIES: 1,
+//     CITY_DISTRICTS: 2
+// };
 const MapType = {
     HEATMAP: 1,
     CLUSTER: 2
@@ -10,7 +10,7 @@ const MapType = {
 let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = MapType.HEATMAP;
-let filterType = FilterType.TREE_SPECIES;
+// let filterType = FilterType.TREE_SPECIES;
 
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer',
     'Kirsche', 'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
@@ -164,24 +164,23 @@ function changeView() {
     }
 }
 
-function changeFilters() {
-    if (filterType === FilterType.TREE_SPECIES) {
-        filterType = FilterType.CITY_DISTRICTS;
-        document.getElementById("tree-species").className = document.getElementById("tree-species").className.replace(/\bactive\b/g, "");
-        document.getElementById("city-districts").className += ' active';
-        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "visible");
-        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bvisible\b/g, "hidden");
-        document.getElementById("select").className += ' hidden';
-    } else {
-        filterType = FilterType.TREE_SPECIES;
-        document.getElementById("city-districts").className = document.getElementById("city-districts").className.replace(/\bactive\b/g, "");
-        document.getElementById("tree-species").className += ' active';
-        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "visible");
-        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bvisible\b/g, "hidden");
-        document.getElementById("select").className = document.getElementById("select").className.replace(/\bhidden\b/g, "");
-
-    }
-}
+// function changeFilters() {
+//     if (filterType === FilterType.TREE_SPECIES) {
+//         filterType = FilterType.CITY_DISTRICTS;
+//         document.getElementById("tree-species").className = document.getElementById("tree-species").className.replace(/\bactive\b/g, "");
+//         document.getElementById("city-districts").className += ' active';
+//         document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "visible");
+//         document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bvisible\b/g, "hidden");
+//         document.getElementById("select").className += ' hidden';
+//     } else {
+//         filterType = FilterType.TREE_SPECIES;
+//         document.getElementById("city-districts").className = document.getElementById("city-districts").className.replace(/\bactive\b/g, "");
+//         document.getElementById("tree-species").className += ' active';
+//         document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "visible");
+//         document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bvisible\b/g, "hidden");
+//         document.getElementById("select").className = document.getElementById("select").className.replace(/\bhidden\b/g, "");
+//     }
+// }
 
 
 function showMarkerCluster(filteredData) {
