@@ -114,12 +114,16 @@ function appendMultiSelect(values) {
     });
 }
 
-function showFilteredData(selectedItems) {
+function filteredDataByTreeSpecies(selectedItems) {
     const filteredData = selectedItems
         ? selectedItems.length > 0
             ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
             : processedData
         : processedData.filter(d => selectDropdown[0].selectize.items.indexOf(d.germanName) !== -1);
+    showFilteredDataPoints(filteredData);
+}
+
+function showFilteredDataPoints(filteredData) {
     if (view === MapType.HEATMAP) {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
@@ -143,11 +147,11 @@ function changeView() {
             document.getElementById("cluster").className += ' active';
             view = MapType.CLUSTER;
             heatmap.setMap(null);
-            showFilteredData(selectedItems);
+            filteredDataByTreeSpecies(selectedItems);
         } else {
             alert("Cluster view is only available for sets below 25K trees!");
             cluster.clearMarkers();
-            showFilteredData(selectedItems);
+            filteredDataByTreeSpecies(selectedItems);
             heatmap.setMap(map);
         }
     } else {
@@ -155,7 +159,7 @@ function changeView() {
         document.getElementById("heatmap").className += ' active';
         view = MapType.HEATMAP;
         cluster.clearMarkers();
-        showFilteredData(selectedItems);
+        filteredDataByTreeSpecies(selectedItems);
         heatmap.setMap(map);
     }
 }
@@ -167,12 +171,15 @@ function changeFilters() {
         document.getElementById("city-districts").className += ' active';
         document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "visible");
         document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bvisible\b/g, "hidden");
+        document.getElementById("select").className += ' hidden';
     } else {
         filterType = FilterType.TREE_SPECIES;
         document.getElementById("city-districts").className = document.getElementById("city-districts").className.replace(/\bactive\b/g, "");
         document.getElementById("tree-species").className += ' active';
         document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "visible");
         document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bvisible\b/g, "hidden");
+        document.getElementById("select").className = document.getElementById("select").className.replace(/\bhidden\b/g, "");
+
     }
 }
 
@@ -236,6 +243,24 @@ function addCityDistrictsBadges() {
             const index = selectedCityDistricts.indexOf(this.innerText);
             // TODO use after geojson initialization!!!
             console.log(map.data.getFeatureById(this.innerText));
+            const allLocalMultiPolys = [];
+            const googleGeometryMultiPoly = [];
+            map.data.getFeatureById(this.innerText).getGeometry().getArray().map((item, i) => {
+                allLocalMultiPolys[i] = [];
+                let curPolyNum = item.getLength();
+                for (let j = 0; j < curPolyNum; j++) {
+                    allLocalMultiPolys[i].push(item.getAt(j).getArray());
+                }
+                googleGeometryMultiPoly.push(new google.maps.Polygon({
+                    paths: allLocalMultiPolys[i]
+                }));
+            });
+            const filteredData = processedData.filter(d => {
+                const point = new google.maps.LatLng(d.lat, d.lng);
+                return googleGeometryMultiPoly.some(polygon => google.maps.geometry.poly.containsLocation(point, polygon));
+            });
+            numberOfSelectedTrees = filteredData.length;
+            showFilteredDataPoints(filteredData);
             if (index === -1) {
                 selectedCityDistricts.push(this.innerText);
                 this.className = this.className.replace('secondary', 'primary');
