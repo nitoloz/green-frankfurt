@@ -54,7 +54,7 @@ function appendMultiSelect(values) {
     });
 }
 //
-// function filteredDataByTreeSpecies(selectedItems) {
+// function filterDataByTreeSpecies(selectedItems) {
 //     const filteredData = selectedItems
 //         ? selectedItems.length > 0
 //             ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
@@ -72,11 +72,11 @@ function appendMultiSelect(values) {
 //             document.getElementById("cluster").className += ' active';
 //             view = MapType.CLUSTER;
 //             heatmap.setMap(null);
-//             filteredDataByTreeSpecies(selectedItems);
+//             filterDataByTreeSpecies(selectedItems);
 //         } else {
 //             alert("Cluster view is only available for sets below 25K trees!");
 //             cluster.clearMarkers();
-//             filteredDataByTreeSpecies(selectedItems);
+//             filterDataByTreeSpecies(selectedItems);
 //             heatmap.setMap(map);
 //         }
 //     } else {
@@ -84,7 +84,7 @@ function appendMultiSelect(values) {
 //         document.getElementById("heatmap").className += ' active';
 //         view = MapType.HEATMAP;
 //         cluster.clearMarkers();
-//         filteredDataByTreeSpecies(selectedItems);
+//         filterDataByTreeSpecies(selectedItems);
 //         heatmap.setMap(map);
 //     }
 // }

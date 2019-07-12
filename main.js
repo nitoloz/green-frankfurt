@@ -72,7 +72,7 @@ function initMap() {
 }
 
 
-function filteredDataByTreeSpecies(selectedItems) {
+function filterDataByTreeSpecies(selectedItems) {
     const filteredData = selectedItems
         ? selectedItems.length > 0
             ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
@@ -85,11 +85,10 @@ function showFilteredDataPoints(filteredData) {
     if (view === MapType.HEATMAP) {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
+        cluster.clearMarkers();
         if (numberOfSelectedTrees < 25000) {
-            cluster.clearMarkers();
             showMarkerCluster(filteredData);
         } else {
-            cluster.clearMarkers();
             heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)));
             heatmap.setMap(map);
             view = MapType.HEATMAP;
@@ -105,26 +104,22 @@ function changeView() {
             document.getElementById("cluster").className += ' active';
             view = MapType.CLUSTER;
             heatmap.setMap(null);
-            filteredDataByTreeSpecies(selectedItems);
         } else {
             alert("Cluster view is only available for sets below 25K trees!");
             cluster.clearMarkers();
-            filteredDataByTreeSpecies(selectedItems);
-            heatmap.setMap(map);
         }
     } else {
         document.getElementById("cluster").className = document.getElementById("cluster").className.replace(/\bactive\b/g, "");
         document.getElementById("heatmap").className += ' active';
         view = MapType.HEATMAP;
         cluster.clearMarkers();
-        filteredDataByTreeSpecies(selectedItems);
-        heatmap.setMap(map);
     }
+    filterDataByTreeSpecies(selectedItems);
 }
 
-function showMarkerCluster(filteredData) {
+function showMarkerCluster(filteredDataPoints) {
     const infoWindow = new google.maps.InfoWindow({content: ``});
-    const markers = filteredData.map(function (treeInfo, i) {
+    const markers = filteredDataPoints.map(function (treeInfo, i) {
 
         const marker = new google.maps.Marker({
             position: {lat: parseFloat(treeInfo.lat), lng: parseFloat(treeInfo.lng)},
