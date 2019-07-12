@@ -6,7 +6,7 @@ const FilterType = {
 // let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 // let processedData = [];
 let filterType = FilterType.TREE_SPECIES;
-
+let internalMap;
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer',
     'Kirsche', 'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
 
@@ -17,10 +17,29 @@ const cityDistricts = ['Altstadt', 'Bahnhofsviertel', 'Bergen-Enkheim', 'Berkers
     'Riederwald', 'Rödelheim', 'Sachsenhausen-N.', 'Sachsenhausen-S.', 'Schwanheim', 'Seckbach', 'Sindlingen', 'Sossenheim',
     'Unterliederbach', 'Westend-Nord', 'Westend-Süd', 'Zeilsheim'];
 
-// let selectedTreeSpecies = [];
-// let availableTreeSpecies = [];
-// let selectedCityDistricts = [];
-//
+let selectedTreeSpecies = [];
+let availableTreeSpecies = [];
+let selectedCityDistricts = [];
+
+
+function initializeSelectize(data){
+    internalMap = new Map();
+    data.forEach(d => {
+        internalMap[d.germanName]
+            ? internalMap[d.germanName].count++
+            : internalMap[d.germanName] = {count: 1, latinName: d.latinName, germanName: d.germanName};
+    });
+    availableTreeSpecies = Object.keys(internalMap);
+    const values = availableTreeSpecies.map((key) => {
+        return {
+            value: key,
+            count: internalMap[key].count,
+            latinName: internalMap[key].latinName,
+            germanName: internalMap[key].germanName
+        };
+    }).sort((a, b) => b.count - a.count);
+    selectDropdown[0].selectize.addOption(values);
+}
 
 function appendMultiSelect(values) {
     selectDropdown = $('select').selectize({

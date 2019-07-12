@@ -1,7 +1,3 @@
-// const FilterType = {
-//     TREE_SPECIES: 1,
-//     CITY_DISTRICTS: 2
-// };
 const MapType = {
     HEATMAP: 1,
     CLUSTER: 2
@@ -9,13 +5,9 @@ const MapType = {
 
 const MAX_CLUSTER_POINTS_NUMBER = 25000;
 
-let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
+let map, heatmap, selectDropdown, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = MapType.HEATMAP;
-
-let selectedTreeSpecies = [];
-let availableTreeSpecies = [];
-let selectedCityDistricts = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -41,24 +33,7 @@ function initMap() {
 
     d3.csv("processed.csv").then(data => {
         processedData = data;
-        internalMap = new Map();
-        processedData.forEach(d => {
-            internalMap[d.germanName]
-                ? internalMap[d.germanName].count++
-                : internalMap[d.germanName] = {count: 1, latinName: d.latinName, germanName: d.germanName};
-        });
-
-        availableTreeSpecies = Object.keys(internalMap);
-        const values = availableTreeSpecies.map((key) => {
-            return {
-                value: key,
-                count: internalMap[key].count,
-                latinName: internalMap[key].latinName,
-                germanName: internalMap[key].germanName
-            };
-        }).sort((a, b) => b.count - a.count);
-        selectDropdown[0].selectize.addOption(values);
-
+        initializeSelectize(processedData);
         heatmap = new google.maps.visualization.HeatmapLayer({
             data: processedData.map(d => new google.maps.LatLng(d.lat, d.lng)),
             map: map,
