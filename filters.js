@@ -17,10 +17,9 @@ const cityDistricts = ['Altstadt', 'Bahnhofsviertel', 'Bergen-Enkheim', 'Berkers
 
 let selectedTreeSpecies = [];
 let availableTreeSpecies = [];
-let selectedCityDistricts = [];
+let selectedCityDistrict;
 
-
-function initializeSelectize(data){
+function initializeSelectize(data) {
     internalMap = new Map();
     data.forEach(d => {
         internalMap[d.germanName]
@@ -72,20 +71,26 @@ function appendMultiSelect(values) {
 }
 
 function changeFilters() {
+    const treeSpeciesButton = document.getElementById("tree-species");
+    const cityDistrictsButton = document.getElementById("city-districts");
+    const speciesBadges = document.getElementById("species-badges");
+    const districtBadges = document.getElementById("district-badges");
+    const selectElement = document.getElementById("select");
+
     if (filterType === FilterType.TREE_SPECIES) {
         filterType = FilterType.CITY_DISTRICTS;
-        document.getElementById("tree-species").className = document.getElementById("tree-species").className.replace(/\bactive\b/g, "");
-        document.getElementById("city-districts").className += ' active';
-        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "");
-        document.getElementById("species-badges").className += ' hidden';
-        document.getElementById("select").className += ' hidden';
+        treeSpeciesButton.className = treeSpeciesButton.className.replace(/\bactive\b/g, "");
+        cityDistrictsButton.className += ' active';
+        districtBadges.className = districtBadges.className.replace(/\bhidden\b/g, "");
+        speciesBadges.className += ' hidden';
+        selectElement.className += ' hidden';
     } else {
         filterType = FilterType.TREE_SPECIES;
-        document.getElementById("city-districts").className = document.getElementById("city-districts").className.replace(/\bactive\b/g, "");
-        document.getElementById("tree-species").className += ' active';
-        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "");
-        document.getElementById("district-badges").className += ' hidden';
-        document.getElementById("select").className = document.getElementById("select").className.replace(/\bhidden\b/g, "");
+        cityDistrictsButton.className = cityDistrictsButton.className.replace(/\bactive\b/g, "");
+        treeSpeciesButton.className += ' active';
+        speciesBadges.className = speciesBadges.className.replace(/\bhidden\b/g, "");
+        districtBadges.className += ' hidden';
+        selectElement.className = selectElement.className.replace(/\bhidden\b/g, "");
     }
 }
 
@@ -118,34 +123,29 @@ function addCityDistrictsBadges() {
         filterSpan.className = 'badge badge-secondary filter-badge flex-grow-1';
         filterSpan.innerHTML = `${disctrict}`;
         filterSpan.onclick = function () {
-            const index = selectedCityDistricts.indexOf(this.innerText);
-            const allLocalMultiPolys = [];
-            const googleGeometryMultiPoly = [];
-            map.data.getFeatureById(this.innerText).getGeometry().getArray().map((item, i) => {
-                allLocalMultiPolys[i] = [];
-                let curPolyNum = item.getLength();
-                for (let j = 0; j < curPolyNum; j++) {
-                    allLocalMultiPolys[i].push(item.getAt(j).getArray());
-                }
-                googleGeometryMultiPoly.push(new google.maps.Polygon({
-                    paths: allLocalMultiPolys[i]
-                }));
-            });
-            const filteredData = processedData.filter(d => {
-                const point = new google.maps.LatLng(d.lat, d.lng);
-                return googleGeometryMultiPoly.some(polygon => google.maps.geometry.poly.containsLocation(point, polygon));
-            });
+            selectedCityDistrict = this.innerText;
+            const filteredData = getFilteredData();
             numberOfSelectedTrees = filteredData.length;
             showFilteredDataPoints(filteredData);
-            if (index === -1) {
-                selectedCityDistricts.push(this.innerText);
-                this.className = this.className.replace('secondary', 'primary');
-            } else {
-                selectedCityDistricts.splice(index, 1);
-                this.className = this.className.replace('primary', 'secondary');
-            }
+            this.className = this.className.replace('secondary', 'primary');
         };
 
         document.getElementById("district-badges").appendChild(filterSpan);
     })
+}
+
+function getCityDistrictGoogleMapPolygons(cityDistrictName) {
+    const cityDistrictPolygons = [];
+    const googleGeometryMultiPoly = [];
+    map.data.getFeatureById(cityDistrictName).getGeometry().getArray().map((item, i) => {
+        cityDistrictPolygons[i] = [];
+        let curPolyNum = item.getLength();
+        for (let j = 0; j < curPolyNum; j++) {
+            cityDistrictPolygons[i].push(item.getAt(j).getArray());
+        }
+        googleGeometryMultiPoly.push(new google.maps.Polygon({
+            paths: cityDistrictPolygons[i]
+        }));
+    });
+    return googleGeometryMultiPoly;
 }

@@ -48,22 +48,31 @@ function initMap() {
     });
 }
 
+function getFilteredData() {
+    if (filterType === FilterType.TREE_SPECIES) {
+        const selectedItems = selectDropdown[0].selectize.items;
+        return selectedItems
+            ? selectedItems.length > 0
+                ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
+                : processedData
+            : processedData.filter(d => selectDropdown[0].selectize.items.indexOf(d.germanName) !== -1);
+    } else {
+        const cityDistrictGoogleMapPolygons = getCityDistrictGoogleMapPolygons(selectedCityDistrict);
+        return processedData.filter(d => {
+            const point = new google.maps.LatLng(d.lat, d.lng);
+            return cityDistrictGoogleMapPolygons.some(polygon => google.maps.geometry.poly.containsLocation(point, polygon));
+        });
+    }
 
-function filterDataByTreeSpecies(selectedItems) {
-    const filteredData = selectedItems
-        ? selectedItems.length > 0
-            ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
-            : processedData
-        : processedData.filter(d => selectDropdown[0].selectize.items.indexOf(d.germanName) !== -1);
-    showFilteredDataPoints(filteredData);
 }
 
 function showFilteredDataPoints(filteredData) {
+    cluster.clearMarkers();
     if (view === MapType.HEATMAP) {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
-        cluster.clearMarkers();
         if (numberOfSelectedTrees < MAX_CLUSTER_POINTS_NUMBER) {
+            heatmap.setMap(null);
             showMarkerCluster(filteredData);
         } else {
             heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)));
@@ -74,24 +83,22 @@ function showFilteredDataPoints(filteredData) {
 }
 
 function toggleMapType() {
-    const selectedItems = selectDropdown[0].selectize.items;
+    const clusterButton = document.getElementById("cluster");
+    const heatmapButton = document.getElementById("heatmap");
     if (view === MapType.HEATMAP) {
         if (numberOfSelectedTrees < MAX_CLUSTER_POINTS_NUMBER) {
-            document.getElementById("heatmap").className = document.getElementById("heatmap").className.replace(/\bactive\b/g, "");
-            document.getElementById("cluster").className += ' active';
+            heatmapButton.className = heatmapButton.className.replace(/\bactive\b/g, "");
+            clusterButton.className += ' active';
             view = MapType.CLUSTER;
-            heatmap.setMap(null);
         } else {
             alert("Cluster view is only available for sets below 25K trees!");
-            cluster.clearMarkers();
         }
     } else {
-        document.getElementById("cluster").className = document.getElementById("cluster").className.replace(/\bactive\b/g, "");
-        document.getElementById("heatmap").className += ' active';
+        clusterButton.className = clusterButton.className.replace(/\bactive\b/g, "");
+        heatmapButton.className += ' active';
         view = MapType.HEATMAP;
-        cluster.clearMarkers();
     }
-    filterDataByTreeSpecies(selectedItems);
+    showFilteredDataPoints(getFilteredData());
 }
 
 function showMarkerCluster(filteredDataPoints) {
