@@ -53,41 +53,6 @@ function appendMultiSelect(values) {
         }
     });
 }
-//
-// function filterDataByTreeSpecies(selectedItems) {
-//     const filteredData = selectedItems
-//         ? selectedItems.length > 0
-//             ? processedData.filter(d => selectedItems.indexOf(d.germanName) !== -1)
-//             : processedData
-//         : processedData.filter(d => selectDropdown[0].selectize.items.indexOf(d.germanName) !== -1);
-//     showFilteredDataPoints(filteredData);
-// }
-//
-//
-// function changeView() {
-//     const selectedItems = selectDropdown[0].selectize.items;
-//     if (view === MapType.HEATMAP) {
-//         if (numberOfSelectedTrees < 25000) {
-//             document.getElementById("heatmap").className = document.getElementById("heatmap").className.replace(/\bactive\b/g, "");
-//             document.getElementById("cluster").className += ' active';
-//             view = MapType.CLUSTER;
-//             heatmap.setMap(null);
-//             filterDataByTreeSpecies(selectedItems);
-//         } else {
-//             alert("Cluster view is only available for sets below 25K trees!");
-//             cluster.clearMarkers();
-//             filterDataByTreeSpecies(selectedItems);
-//             heatmap.setMap(map);
-//         }
-//     } else {
-//         document.getElementById("cluster").className = document.getElementById("cluster").className.replace(/\bactive\b/g, "");
-//         document.getElementById("heatmap").className += ' active';
-//         view = MapType.HEATMAP;
-//         cluster.clearMarkers();
-//         filterDataByTreeSpecies(selectedItems);
-//         heatmap.setMap(map);
-//     }
-// }
 
 function changeFilters() {
     if (filterType === FilterType.TREE_SPECIES) {
@@ -137,8 +102,6 @@ function addCityDistrictsBadges() {
         filterSpan.innerHTML = `${disctrict}`;
         filterSpan.onclick = function () {
             const index = selectedCityDistricts.indexOf(this.innerText);
-            // TODO use after geojson initialization!!!
-            console.log(map.data.getFeatureById(this.innerText));
             const allLocalMultiPolys = [];
             const googleGeometryMultiPoly = [];
             map.data.getFeatureById(this.innerText).getGeometry().getArray().map((item, i) => {

@@ -7,6 +7,8 @@ const MapType = {
     CLUSTER: 2
 };
 
+const MAX_CLUSTER_POINTS_NUMBER = 25000;
+
 let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = MapType.HEATMAP;
@@ -86,7 +88,7 @@ function showFilteredDataPoints(filteredData) {
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
         cluster.clearMarkers();
-        if (numberOfSelectedTrees < 25000) {
+        if (numberOfSelectedTrees < MAX_CLUSTER_POINTS_NUMBER) {
             showMarkerCluster(filteredData);
         } else {
             heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)));
@@ -99,7 +101,7 @@ function showFilteredDataPoints(filteredData) {
 function changeView() {
     const selectedItems = selectDropdown[0].selectize.items;
     if (view === MapType.HEATMAP) {
-        if (numberOfSelectedTrees < 25000) {
+        if (numberOfSelectedTrees < MAX_CLUSTER_POINTS_NUMBER) {
             document.getElementById("heatmap").className = document.getElementById("heatmap").className.replace(/\bactive\b/g, "");
             document.getElementById("cluster").className += ' active';
             view = MapType.CLUSTER;
