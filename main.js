@@ -10,17 +10,6 @@ const MapType = {
 let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
 let processedData = [];
 let view = MapType.HEATMAP;
-// let filterType = FilterType.TREE_SPECIES;
-
-const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer',
-    'Kirsche', 'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
-
-const cityDistricts = ['Altstadt', 'Bahnhofsviertel', 'Bergen-Enkheim', 'Berkersheim', 'Bockenheim', 'Bonames', 'Bornheim',
-    'Dornbusch', 'Eckenheim', 'Eschersheim', 'Fechenheim', 'Flughafen', 'Frankfurter Berg', 'Gallus', 'Ginnheim', 'Griesheim',
-    'Gutleutviertel', 'Harheim', 'Hausen', 'Heddernheim', 'Höchst', 'Innenstadt', 'Kalbach-Riedberg', 'Nied', 'Nieder-Erlenbach',
-    'Nieder-Eschbach', 'Niederrad', 'Niederursel', 'Nordend-Ost', 'Nordend-West', 'Oberrad', 'Ostend', 'Praunheim', 'Preungesheim',
-    'Riederwald', 'Rödelheim', 'Sachsenhausen-N.', 'Sachsenhausen-S.', 'Schwanheim', 'Seckbach', 'Sindlingen', 'Sossenheim',
-    'Unterliederbach', 'Westend-Nord', 'Westend-Süd', 'Zeilsheim'];
 
 let selectedTreeSpecies = [];
 let availableTreeSpecies = [];
@@ -81,38 +70,7 @@ function initMap() {
             });
     });
 }
-//
-// function appendMultiSelect(values) {
-//     selectDropdown = $('select').selectize({
-//         theme: 'links',
-//         plugins: ['remove_button', 'restore_on_backspace'],
-//         maxItems: null,
-//         valueField: 'value',
-//         searchField: 'value',
-//         options: values,
-//         render: {
-//             option: function (data, escape) {
-//                 return `<div class="option">
-//                                 <span class="title">${escape(data.germanName)}</span>
-//                                 <span class="url"> (${escape(data.count)})</span>
-//                                 <div class="url">${escape(data.latinName)}</div>
-//                             </div>`;
-//             },
-//             item: function (data, escape) {
-//                 return `<div>${escape(data.germanName)} (${escape(data.count)})</div>`;
-//             }
-//         },
-//         onItemAdd: function (value, $item) {
-//             numberOfSelectedTrees = this.items.map(item => internalMap[item].count).reduce((a, b) => a + b);
-//             document.getElementById('show-selected').innerHTML = `Show ${numberOfSelectedTrees} trees!`;
-//         },
-//         onItemRemove: function (value, $item) {
-//             const countsArray = this.items.map(item => internalMap[item].count);
-//             numberOfSelectedTrees = countsArray.length > 0 ? countsArray.reduce((a, b) => a + b) : 0;
-//             document.getElementById('show-selected').innerHTML = `Show ${numberOfSelectedTrees} trees!`;
-//         }
-//     });
-// }
+
 
 function filteredDataByTreeSpecies(selectedItems) {
     const filteredData = selectedItems
