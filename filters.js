@@ -2,16 +2,14 @@ const FilterType = {
     TREE_SPECIES: 1,
     CITY_DISTRICTS: 2
 };
-//
-// let map, heatmap, selectDropdown, internalMap, numberOfSelectedTrees, cluster;
-// let processedData = [];
 let filterType = FilterType.TREE_SPECIES;
-let internalMap;
+let internalMap, numberOfSelectedTrees, selectDropdown
+
 const treeSpecies = ['Ahorn', 'Birke', 'Buche', 'Eiche', 'Erle', 'Esche', 'Espe', 'Hainbuche', 'Hasel', 'Kastanie', 'Kiefer',
     'Kirsche', 'Linde', 'Magnolie', 'Platane', 'Robinie', 'Pappel', 'Ulme', 'Walnuss', 'Weide'];
 
 const cityDistricts = ['Altstadt', 'Bahnhofsviertel', 'Bergen-Enkheim', 'Berkersheim', 'Bockenheim', 'Bonames', 'Bornheim',
-    'Dornbusch', 'Eckenheim', 'Eschersheim', 'Fechenheim', 'Flughafen', 'Frankfurter Berg', 'Gallus', 'Ginnheim', 'Griesheim',
+    'Dornbusch', 'Eckenheim', 'Eschersheim', 'Fechenheim', 'Frankfurter Berg', 'Gallus', 'Ginnheim', 'Griesheim',
     'Gutleutviertel', 'Harheim', 'Hausen', 'Heddernheim', 'Höchst', 'Innenstadt', 'Kalbach-Riedberg', 'Nied', 'Nieder-Erlenbach',
     'Nieder-Eschbach', 'Niederrad', 'Niederursel', 'Nordend-Ost', 'Nordend-West', 'Oberrad', 'Ostend', 'Praunheim', 'Preungesheim',
     'Riederwald', 'Rödelheim', 'Sachsenhausen-N.', 'Sachsenhausen-S.', 'Schwanheim', 'Seckbach', 'Sindlingen', 'Sossenheim',
@@ -78,15 +76,15 @@ function changeFilters() {
         filterType = FilterType.CITY_DISTRICTS;
         document.getElementById("tree-species").className = document.getElementById("tree-species").className.replace(/\bactive\b/g, "");
         document.getElementById("city-districts").className += ' active';
-        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "visible");
-        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bvisible\b/g, "hidden");
+        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bhidden\b/g, "");
+        document.getElementById("species-badges").className += ' hidden';
         document.getElementById("select").className += ' hidden';
     } else {
         filterType = FilterType.TREE_SPECIES;
         document.getElementById("city-districts").className = document.getElementById("city-districts").className.replace(/\bactive\b/g, "");
         document.getElementById("tree-species").className += ' active';
-        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "visible");
-        document.getElementById("district-badges").className = document.getElementById("district-badges").className.replace(/\bvisible\b/g, "hidden");
+        document.getElementById("species-badges").className = document.getElementById("species-badges").className.replace(/\bhidden\b/g, "");
+        document.getElementById("district-badges").className += ' hidden';
         document.getElementById("select").className = document.getElementById("select").className.replace(/\bhidden\b/g, "");
     }
 }

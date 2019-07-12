@@ -5,7 +5,7 @@ const MapType = {
 
 const MAX_CLUSTER_POINTS_NUMBER = 25000;
 
-let map, heatmap, selectDropdown, numberOfSelectedTrees, cluster;
+let map, heatmap, cluster;
 let processedData = [];
 let view = MapType.HEATMAP;
 
@@ -73,7 +73,7 @@ function showFilteredDataPoints(filteredData) {
     }
 }
 
-function changeView() {
+function toggleMapType() {
     const selectedItems = selectDropdown[0].selectize.items;
     if (view === MapType.HEATMAP) {
         if (numberOfSelectedTrees < MAX_CLUSTER_POINTS_NUMBER) {

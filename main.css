@@ -47,7 +47,3 @@ html, body {
 .hidden{
     display: none !important;
 }
-
-.visible{
-    display: flex !important;
-}

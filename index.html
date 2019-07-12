@@ -42,12 +42,12 @@
             <button class="btn btn-primary"  id="city-districts" onclick="changeFilters()">City Districts</button>
         </div>
         <div class="btn-group btn-group-sm padding-bottom-4" role="group" aria-label="Change view">
-            <button class="btn btn-primary active"  id="heatmap" onclick="changeView()">Heatmap <i class="fas fa-fire"></i></button>
-            <button class="btn btn-primary"  id="cluster" onclick="changeView()">Cluster <i class="fas fa-map-marker-alt"></i></button>
+            <button class="btn btn-primary active"  id="heatmap" onclick="toggleMapType()">Heatmap <i class="fas fa-fire"></i></button>
+            <button class="btn btn-primary"  id="cluster" onclick="toggleMapType()">Cluster <i class="fas fa-map-marker-alt"></i></button>
         </div>
     </div>
     <div class="d-flex flex-row flex-wrap mb-1 hidden" id="district-badges"></div>
-    <div class="d-flex flex-row flex-wrap mb-1 visible" id="species-badges"></div>
+    <div class="d-flex flex-row flex-wrap mb-1" id="species-badges"></div>
     <div class="d-flex flex-row"  id="select">
         <div class="flex-grow-1">
             <select></select>
