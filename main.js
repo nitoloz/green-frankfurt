@@ -69,6 +69,9 @@ function getFilteredData() {
 function showFilteredDataPoints(filteredData) {
     cluster.clearMarkers();
     if (view === MapType.HEATMAP) {
+        if(!heatmap.getMap()){
+            heatmap.setMap(map);
+        }
         heatmap.setData(filteredData.map(d => new google.maps.LatLng(d.lat, d.lng)))
     } else {
         if (numberOfSelectedTrees < MAX_CLUSTER_POINTS_NUMBER) {
