@@ -127,6 +127,7 @@ function addCityDistrictsBadges() {
             const filteredData = getFilteredData();
             numberOfSelectedTrees = filteredData.length;
             showFilteredDataPoints(filteredData);
+            Array.from(document.getElementsByClassName("badge")).forEach(element => element.className = element.className.replace('primary', 'secondary'));
             this.className = this.className.replace('secondary', 'primary');
         };
 
