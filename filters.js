@@ -134,19 +134,3 @@ function addCityDistrictsBadges() {
         document.getElementById("district-badges").appendChild(filterSpan);
     })
 }
-
-function getCityDistrictGoogleMapPolygons(cityDistrictName) {
-    const cityDistrictPolygons = [];
-    const googleGeometryMultiPoly = [];
-    map.data.getFeatureById(cityDistrictName).getGeometry().getArray().map((item, i) => {
-        cityDistrictPolygons[i] = [];
-        let curPolyNum = item.getLength();
-        for (let j = 0; j < curPolyNum; j++) {
-            cityDistrictPolygons[i].push(item.getAt(j).getArray());
-        }
-        googleGeometryMultiPoly.push(new google.maps.Polygon({
-            paths: cityDistrictPolygons[i]
-        }));
-    });
-    return googleGeometryMultiPoly;
-}
