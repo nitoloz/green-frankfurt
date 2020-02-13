@@ -1,5 +1,6 @@
 # Frankfurt green spaces on Google Maps
 Data for this report was collected from [Frankfurt Baumkataster](http://offenedaten.frankfurt.de/dataset/baumkataster-frankfurt-am-main)
+![Frankfurt Center](/images/green_frankfurt_cluster_district.png)
 
 ## Available visualizations:
 * Cluster (every tree displayed as a point with information shown in tooltip)
@@ -8,4 +9,4 @@ Data for this report was collected from [Frankfurt Baumkataster](http://offeneda
 
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
-|<img width="1604" alt="Green Frankfurt" src="/images/green_frankfurt_cluster.png">  Green Frankfurt |  <img width="1604" alt="Heatmap of Frankfurt green spaces" src="/images/green_frankfurt_cluster_district.png"> Heatmap of Frankfurt green spaces|<img width="1604" alt="Trees in Frankfurt Innenstadt" src="/images/green_frankfurt_heatmap.png"> Trees in Frankfurt Innenstadt|
+|<img width="1604" alt="Green Frankfurt" src="/images/green_frankfurt_cluster.png">  Green Frankfurt |  <img width="1604" alt="Trees in Frankfurt Innenstadt" src="/images/green_frankfurt_cluster_district.png"> Trees in Frankfurt Innenstadt | <img width="1604" alt="Trees in Frankfurt Innenstadt" src="/images/green_frankfurt_heatmap.png"> Heatmap of Frankfurt green spaces|
