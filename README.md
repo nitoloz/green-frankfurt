@@ -8,6 +8,4 @@ Data for this report was collected from [Frankfurt Baumkataster](http://offeneda
 
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
-|<img width="1604" alt="Green Frankfurt" src="https://github.com/nitoloz/green-frankfurt/blob/master/images/green_frankfurt_cluster.png">  blah |  <img width="1604" alt="Green Frankfurt" src="/images/green_frankfurt_cluster.png">|<img width="1604" alt="Green Frankfurt" src="/images/green_frankfurt_cluster.png">|
-
-![Cluster](/images/green_frankfurt_cluster.png)
+|<img width="1604" alt="Green Frankfurt" src="/images/green_frankfurt_cluster.png">  Green Frankfurt |  <img width="1604" alt="Heatmap of Frankfurt green spaces" src="/images/green_frankfurt_cluster_district.png"> Heatmap of Frankfurt green spaces|<img width="1604" alt="Trees in Frankfurt Innenstadt" src="/images/green_frankfurt_heatmap.png"> Trees in Frankfurt Innenstadt|
